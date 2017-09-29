@@ -21,7 +21,6 @@
             <property name="name" value="honorific guest"></property>
         </bean>
 
-
     </beans>
 
 </beans>

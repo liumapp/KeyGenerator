@@ -26,6 +26,7 @@ public class IndexController {
         model.addAttribute("name" , guest.getName());
         model.addAttribute("sex" , guest.getSex());
         return "index";
+
     }
 
 }
