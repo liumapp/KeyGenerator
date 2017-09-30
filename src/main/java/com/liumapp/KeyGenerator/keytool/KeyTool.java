@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by liumapp on 9/29/17.
@@ -12,6 +14,19 @@ import java.io.InputStreamReader;
  */
 @Component
 public class KeyTool {
+
+    public volatile int inc = 0;
+
+    Lock lock = new ReentrantLock();
+
+    public void increase() {
+        lock.lock();
+        try {
+            inc++;
+        } finally {
+            lock.unlock();
+        }
+    }
 
     public static void exeCmd(String commandStr) {
         BufferedReader br = null;
@@ -41,9 +56,23 @@ public class KeyTool {
     }
 
     public static void main(String[] args) {
-        String commandStr = "ping www.taobao.com";
-        //String commandStr = "ipconfig";
-        KeyTool.exeCmd(commandStr);
+//        String commandStr = "ping www.taobao.com";
+//        KeyTool.exeCmd(commandStr);
+        KeyTool keyTool = new KeyTool();
+
+        for (int i = 0 ; i < 10 ; i++) {
+
+            GenerateThread generateThread = new GenerateThread();
+            generateThread.setKeyTool(keyTool);
+            new Thread(generateThread).start();
+        }
+
+        while (Thread.activeCount() > 1 ) {
+            Thread.yield();
+        }
+
+        System.out.println(keyTool.inc);
+
     }
 
 }
