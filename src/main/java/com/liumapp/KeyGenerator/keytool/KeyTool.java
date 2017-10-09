@@ -65,6 +65,7 @@ public class KeyTool {
             GenerateThread generateThread = new GenerateThread();
             generateThread.setKeyTool(keyTool);
             new Thread(generateThread).start();
+
         }
 
         while (Thread.activeCount() > 1 ) {

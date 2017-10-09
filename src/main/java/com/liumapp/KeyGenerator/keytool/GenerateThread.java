@@ -1,5 +1,8 @@
 package com.liumapp.KeyGenerator.keytool;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by liumapp on 9/29/17.
  * E-mail:liumapp.com@gmail.com
@@ -9,6 +12,8 @@ public class GenerateThread extends Thread {
 
     private KeyTool keyTool;
 
+    Lock lock = new ReentrantLock();
+
     public void setKeyTool(KeyTool keyTool) {
         this.keyTool = keyTool;
     }
@@ -17,7 +22,12 @@ public class GenerateThread extends Thread {
     public void run() {
 
         for (int j = 0 ; j < 1000 ; j++) {
-            keyTool.increase();
+            lock.lock();
+            try {
+                keyTool.inc++;
+            } finally {
+                lock.unlock();
+            }
         }
 
     }
@@ -28,7 +38,5 @@ public class GenerateThread extends Thread {
     public void cancel () {
         interrupt();
     }
-
-
 
 }
