@@ -19,7 +19,7 @@ public class KeyGeneratorTest extends TestCase {
         try {
             queen.connect();
             if (queen.isConnected()) {
-                queen.say("hello my lovely worker");
+                queen.say("ls");
                 System.out.println(queen.hear());
             }
         } catch (IOException e) {

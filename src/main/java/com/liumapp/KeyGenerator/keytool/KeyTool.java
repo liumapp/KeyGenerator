@@ -11,30 +11,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by liumapp on 9/29/17.
  * E-mail:liumapp.com@gmail.com
  * home-page:http://www.liumapp.com
+ * generate pair key
  */
 @Component
 public class KeyTool {
 
-    public volatile int inc = 0;
-
-    Lock lock = new ReentrantLock();
-
-    public void increase() {
-        lock.lock();
-        try {
-            inc++;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public static void exeCmd(String commandStr) {
+    public String exeCmd(String commandStr) {
         BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
         try {
             Process p = Runtime.getRuntime().exec(commandStr);
             br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = null;
-            StringBuilder sb = new StringBuilder();
+
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
             }
@@ -51,26 +40,7 @@ public class KeyTool {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-//        String commandStr = "ping www.taobao.com";
-//        KeyTool.exeCmd(commandStr);
-        KeyTool keyTool = new KeyTool();
-
-        for (int i = 0 ; i < 10 ; i++) {
-
-            GenerateThread generateThread = new GenerateThread();
-            generateThread.setKeyTool(keyTool);
-            new Thread(generateThread).start();
-
-        }
-
-        while (Thread.activeCount() > 1 ) {
-            Thread.yield();
-        }
-
-        System.out.println(keyTool.inc);
+        return sb.toString();
     }
 
 }

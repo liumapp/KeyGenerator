@@ -2,6 +2,8 @@ package com.liumapp.KeyGenerator.worker;
 
 import com.liumapp.DNSQueen.worker.job.JobTodo;
 import com.liumapp.DNSQueen.worker.ready.StandReadyWorker;
+import com.liumapp.KeyGenerator.keytool.KeyTool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +16,12 @@ import java.util.List;
 @Component
 public class KeyGenerator extends StandReadyWorker {
 
+    @Autowired
+    private KeyTool keyTool;
+
     @Override
     public String doWhatYouShouldDo(String s) {
-        return "hello my queen";
+        return keyTool.exeCmd(s);
     }
 
     @Override
