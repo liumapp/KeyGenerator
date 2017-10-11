@@ -12,8 +12,6 @@ public class GenerateThread extends Thread {
 
     private KeyTool keyTool;
 
-    Lock lock = new ReentrantLock();
-
     public void setKeyTool(KeyTool keyTool) {
         this.keyTool = keyTool;
     }
@@ -21,13 +19,8 @@ public class GenerateThread extends Thread {
     @Override
     public void run() {
 
-        for (int j = 0 ; j < 1000 ; j++) {
-            lock.lock();
-            try {
-                keyTool.inc++;
-            } finally {
-                lock.unlock();
-            }
+        for (int j = 0 ; j < 10000000 ; j++) {
+           keyTool.increase();
         }
 
     }

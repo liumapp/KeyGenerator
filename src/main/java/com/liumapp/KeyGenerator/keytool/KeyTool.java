@@ -41,9 +41,7 @@ public class KeyTool {
             System.out.println(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             if (br != null)
             {
                 try {
@@ -73,7 +71,6 @@ public class KeyTool {
         }
 
         System.out.println(keyTool.inc);
-
     }
 
 }
