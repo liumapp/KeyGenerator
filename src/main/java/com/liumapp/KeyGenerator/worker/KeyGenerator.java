@@ -3,9 +3,16 @@ package com.liumapp.KeyGenerator.worker;
 import com.liumapp.DNSQueen.worker.job.JobTodo;
 import com.liumapp.DNSQueen.worker.ready.StandReadyWorker;
 import com.liumapp.KeyGenerator.keytool.KeyTool;
+import com.liumapp.KeyGeneratorHelper.service.KeyTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -21,7 +28,31 @@ public class KeyGenerator extends StandReadyWorker {
 
     @Override
     public String doWhatYouShouldDo(String s) {
-        return keyTool.exeCmd(s);
+
+        try {
+            try (FileOutputStream out = new FileOutputStream("test.ks")) {
+                KeyTools.newKeyStore("1234")
+                        .newKeyPair()
+                        .keyLength(2048)
+                        .generateWithCertificate()
+                        .withValidity(1, ChronoUnit.YEARS)
+                        .withDistinguishName()
+                        .commonName("Andrea Como")
+                        .state("Toscana")
+                        .locality("Prato")
+                        .country("IT")
+                        .email("test@example.com")
+                        .build()
+                        .createInKeyStore("test", "456")
+                        .writeTo(out);
+            } finally {
+                File keyStoreFile = new File("test.ks");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "job is done , my queen";
     }
 
     @Override
